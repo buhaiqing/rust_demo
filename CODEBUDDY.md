@@ -42,11 +42,12 @@ rust_demo/
 
 ## CI/CD
 
-GitHub Actions builds on tag push for 5 platforms:
+GitHub Actions builds on tag push for 4 platforms:
 - Windows x64 (`x86_64-pc-windows-msvc`)
 - macOS x64 (`x86_64-apple-darwin`)
 - macOS ARM64 (`aarch64-apple-darwin`)
 - Linux x64 (`x86_64-unknown-linux-gnu`)
-- Linux ARM64 (`aarch64-unknown-linux-gnu`)
+
+Each job runs natively on its runner's architecture — no cross-compilation. (Linux ARM64 omitted; cross-compiling to aarch64 from an x86_64 runner requires extra toolchain setup that's overkill for this demo.)
 
 Each job runs `cargo build --release --target <triple>`, packages the binary into a tarball (or zip on Windows), and uploads as an artifact. Once all jobs succeed, `create-release` aggregates artifacts and publishes a GitHub Release via `softprops/action-gh-release`.

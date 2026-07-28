@@ -24,7 +24,8 @@ This automatically builds for:
 - macOS x64 (`x86_64-apple-darwin`)
 - macOS ARM64 (`aarch64-apple-darwin`)
 - Linux x64 (`x86_64-unknown-linux-gnu`)
-- Linux ARM64 (`aarch64-unknown-linux-gnu`)
+
+Each job uses the runner's native architecture where possible; macOS and Windows runners handle both Intel and ARM natively, while Linux runs on x86_64 hosts.
 
 Each build uploads a tarball (or zip on Windows) containing the single static binary.
 

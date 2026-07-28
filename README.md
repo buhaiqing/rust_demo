@@ -1,46 +1,13 @@
 # Rust Demo
 
-A cross-platform GUI application built with Tauri 2 and Rust.
+A minimal cross-platform command-line Hello World written in Rust.
 
-## Features
-
-- Cross-platform GUI (Windows, macOS, Linux)
-- Fast native performance with Rust backend
-- Web-based frontend (HTML/CSS/JS)
-- GitHub Actions for automated cross-platform builds
-
-## Tech Stack
-
-- **Frontend**: Vanilla HTML/CSS/JS
-- **Backend**: Rust + Tauri 2
-- **CI/CD**: GitHub Actions
-
-## Development
-
-### Prerequisites
-
-- Rust 1.70+
-- Node.js 18+
-- npm
-
-### Setup
+## Usage
 
 ```bash
-# Install frontend dependencies
-cd src-tauri && npm install
-
-# Run in development mode
-npm run tauri dev
-```
-
-### Build
-
-```bash
-# Build for current platform
-cd src-tauri && npm run tauri build
-
-# Build for release (creates installable bundles)
-npm run tauri build -- --release
+cargo run                      # Hello, world!
+cargo run -- Alice             # Hello, Alice!
+cargo build --release          # ./target/release/rust_demo
 ```
 
 ## Release Workflow
@@ -48,8 +15,8 @@ npm run tauri build -- --release
 Push a tag to trigger cross-platform builds:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.2.0
+git push origin v0.2.0
 ```
 
 This automatically builds for:
@@ -59,20 +26,15 @@ This automatically builds for:
 - Linux x64 (`x86_64-unknown-linux-gnu`)
 - Linux ARM64 (`aarch64-unknown-linux-gnu`)
 
+Each build uploads a tarball (or zip on Windows) containing the single static binary.
+
 ## Project Structure
 
 ```
 rust_demo/
-├── src/                    # CLI entry point (optional)
-├── src-tauri/             # Tauri application
-│   ├── src/main.rs         # Rust source
-│   ├── Cargo.toml          # Rust dependencies
-│   ├── tauri.conf.json     # Tauri config
-│   ├── package.json        # Node dependencies
-│   └── icons/              # App icons
-├── dist/                   # Frontend assets
-├── .github/workflows/      # CI/CD
-└── Cargo.toml              # Workspace manifest
+├── src/main.rs             # CLI entry point
+├── Cargo.toml              # Manifest
+└── .github/workflows/      # CI/CD
 ```
 
 ## License

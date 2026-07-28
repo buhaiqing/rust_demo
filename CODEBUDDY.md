@@ -4,68 +4,41 @@ This file provides guidance to CodeBuddy Code when working with code in this rep
 
 ## Project Overview
 
-This is a Tauri 2 + Rust cross-platform GUI application with vanilla HTML/CSS/JS frontend.
+A minimal cross-platform command-line Hello World written in Rust. No GUI, no frontend — single binary, single source file.
 
 ## Development Commands
 
-### Setup
+### Build & Run
 ```bash
-cd src-tauri && npm install
-```
-
-### Development
-```bash
-# Run in development mode with hot reload
-npm run tauri dev
-
-# Or directly with cargo
-cargo build --manifest-path src-tauri/Cargo.toml
+cargo run                       # prints "Hello, world!"
+cargo run -- Alice              # prints "Hello, Alice!"
+cargo build --release           # ./target/release/rust_demo
 ```
 
 ### Testing
 ```bash
-# Run Rust unit tests (in src-tauri directory)
-cargo test --manifest-path src-tauri/Cargo.toml
-
-# Run specific test
-cargo test --manifest-path src-tauri/Cargo.toml greet
-```
-
-### Building
-```bash
-# Build Tauri app for current platform
-cd src-tauri && npm run tauri build
-
-# Build for specific target
-cd src-tauri && npm run tauri build -- --target x86_64-unknown-linux-gnu
+cargo test
 ```
 
 ### Release
 ```bash
-# Create and push a version tag to trigger GitHub Actions
-git tag v0.x.x && git push origin v0.x.x
+git tag v0.x.x && git push origin v0.x.x   # triggers CI for 5 platforms
 ```
 
 ## Architecture
 
 ```
 rust_demo/
-├── src-tauri/              # Tauri application (main workspace)
-│   ├── src/main.rs         # Rust backend: Tauri commands, window setup
-│   ├── Cargo.toml          # Rust dependencies (Tauri 2, serde)
-│   ├── tauri.conf.json     # Tauri configuration (window, bundle settings)
-│   ├── package.json        # Node dependencies (@tauri-apps/cli)
-│   └── icons/              # App icons (PNG, ICNS, ICO)
-├── src/                    # Optional CLI entry point (root level)
-├── dist/                   # Frontend assets (HTML/CSS/JS served by Tauri)
-└── .github/workflows/       # CI/CD: cross-platform release builds
+├── src/main.rs          # Single-file CLI: reads optional argv[1], prints greeting
+├── Cargo.toml           # Manifest (release profile: lto, opt-level=z, strip)
+└── .github/workflows/   # CI/CD: cross-platform release builds
 ```
 
 ### Key Patterns
 
-- **Tauri commands**: Use `#[tauri::command]` attribute to expose Rust functions to frontend
-- **Pure functions**: Business logic separated from `#[tauri::command]` for testability
-- **Bundle identifier**: Must use hyphens (not underscores) - e.g., `com.rust-demo.app`
+- **Stdlib only**: no external crates — uses `std::env::args()` for input
+- **Single source file**: all logic in `src/main.rs`
+- **Release profile**: aggressively optimized (`lto`, `codegen-units=1`, `opt-level="z"`, `strip`)
 
 ## CI/CD
 
@@ -76,4 +49,4 @@ GitHub Actions builds on tag push for 5 platforms:
 - Linux x64 (`x86_64-unknown-linux-gnu`)
 - Linux ARM64 (`aarch64-unknown-linux-gnu`)
 
-Build artifacts are uploaded and a GitHub Release is created automatically.
+Each job runs `cargo build --release --target <triple>`, packages the binary into a tarball (or zip on Windows), and uploads as an artifact. Once all jobs succeed, `create-release` aggregates artifacts and publishes a GitHub Release via `softprops/action-gh-release`.

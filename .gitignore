@@ -1,12 +1,5 @@
 # Build artifacts
 /target/
-/src-tauri/target/
-/src-tauri/node_modules/
-/src-tauri/gen/
-
-# Dependencies
-Cargo.lock
-/src-tauri/Cargo.lock
 
 # IDE
 .idea/
@@ -20,3 +13,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Local state
+.omc/

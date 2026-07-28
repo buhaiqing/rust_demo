@@ -1,0 +1,22 @@
+# Build artifacts
+/target/
+/src-tauri/target/
+/src-tauri/node_modules/
+/src-tauri/gen/
+
+# Dependencies
+Cargo.lock
+/src-tauri/Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
